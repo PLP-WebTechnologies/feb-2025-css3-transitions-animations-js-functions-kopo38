@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smooth CSS Transitions and Animations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .animated-box {
+            width: 100px;
+            height: 100px;
+            background-color: #28a745;
+            margin: 20px;
+            border-radius: 10px;
+            transition: transform 0.5s ease, background-color 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-30px);
+            }
+            60% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .bounce {
+            animation: bounce 1s ease;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 16px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dynamic Animations</h1>
+        <select id="colorSelect">
+            <option value="#28a745">Green</option>
+            <option value="#dc3545">Red</option>
+            <option value="#ffc107">Yellow</option>
+        </select>
+        <button onclick="triggerAnimation()">Animate Box</button>
+        <div class="animated-box" id="box"></div>
+    </div>
+
+    <script>
+        // Load saved preferences from localStorage
+        function loadPreferences() {
+            const savedColor = localStorage.getItem('boxColor');
+            const box = document.getElementById('box');
+            const select = document.getElementById('colorSelect');
+            
+            if (savedColor) {
+                box.style.backgroundColor = savedColor;
+                select.value = savedColor;
+            }
+        }
+
+        // Save preferences to localStorage
+        function savePreferences(color) {
+            localStorage.setItem('boxColor', color);
+        }
+
+        // Trigger animation and update color
+        function triggerAnimation() {
+            const box = document.getElementById('box');
+            const select = document.getElementById('colorSelect');
+            const selectedColor = select.value;
+
+            // Apply bounce animation
+            box.classList.add('bounce');
+            box.style.backgroundColor = selectedColor;
+
+            // Save the selected color
+            savePreferences(selectedColor);
+
+            // Remove animation class after it completes to allow re-triggering
+            setTimeout(() => {
+                box.classList.remove('bounce');
+            }, 1000);
+        }
+
+        // Update color when select option changes
+        document.getElementById('colorSelect').addEventListener('change', () => {
+            const box = document.getElementById('box');
+            const selectedColor = document.getElementById('colorSelect').value;
+            box.style.backgroundColor = selectedColor;
+            savePreferences(selectedColor);
+        });
+
+        // Load preferences on page load
+        window.onload = loadPreferences;
+    </script>
+</body>
+</html>
